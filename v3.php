@@ -20,6 +20,12 @@ class App
 
 class Auth
 {
+    public function __construct($dsn, $user, $pass)
+    {
+        echo "Connecting to '$dsn' with '$user'/'$pass'...\n";
+        sleep(1);
+    }
+
     public function check($username, $password)
     {
         echo "Checking username, password from database...\n";
@@ -30,6 +36,11 @@ class Auth
 
 class HttpAuth extends Auth
 {
+    public function __construct()
+    {
+
+    }
+
     public function check($username, $password)
     {
         echo "Checking username, password from HTTP Authentication...\n";

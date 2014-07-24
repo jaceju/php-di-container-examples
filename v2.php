@@ -20,6 +20,12 @@ class App
 
 class Auth
 {
+    public function __construct($dsn, $user, $pass)
+    {
+        echo "Connecting to '$dsn' with '$user'/'$pass'...\n";
+        sleep(1);
+    }
+
     public function check($username, $password)
     {
         echo "Checking username, password from database...\n";
@@ -28,7 +34,7 @@ class Auth
     }
 }
 
-$app = new App(new Auth());
+$app = new App(new Auth('mysql://localhost', 'root', '123456'));
 $username = 'jaceju';
 if ($app->login($username, 'password')) {
     echo "$username just signed in.\n";

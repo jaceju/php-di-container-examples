@@ -6,7 +6,7 @@ class App
 
     public function login($username, $password)
     {
-        $this->auth = new Auth();
+        $this->auth = new Auth('mysql://localhost', 'root', '123456');
         if ($this->auth->check($username, $password)) {
             return true;
         }
@@ -16,6 +16,12 @@ class App
 
 class Auth
 {
+    public function __construct($dsn, $user, $pass)
+    {
+        echo "Connecting to '$dsn' with '$user'/'$pass'...\n";
+        sleep(1);
+    }
+
     public function check($username, $password)
     {
         echo "Checking username, password from database...\n";
