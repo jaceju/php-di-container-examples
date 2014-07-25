@@ -3,15 +3,18 @@
 class App
 {
     protected $auth = null;
+    protected $session = null;
 
-    public function __construct(Auth $auth)
+    public function __construct(Auth $auth, Session $session)
     {
         $this->auth = $auth;
+        $this->session = $session;
     }
 
     public function login($username, $password)
     {
         if ($this->auth->check($username, $password)) {
+            $this->session->set('username', $username);
             return true;
         }
         return false;
@@ -106,6 +109,14 @@ class Container
         return !empty($args) ?
                $reflectionClass->newInstanceArgs($args) :
                new $class();
+    }
+}
+
+class Session
+{
+    public function set($name, $value)
+    {
+        echo "Set session variable '$name' to '$value'.\n";
     }
 }
 

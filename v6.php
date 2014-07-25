@@ -3,15 +3,18 @@
 class App
 {
     protected $auth = null;
+    protected $session = null;
 
-    public function __construct(Auth $auth)
+    public function __construct(Auth $auth, Session $session)
     {
         $this->auth = $auth;
+        $this->session = $session;
     }
 
     public function login($username, $password)
     {
         if ($this->auth->check($username, $password)) {
+            $this->session->set('username', $username);
             return true;
         }
         return false;
@@ -88,14 +91,22 @@ class Container
     }
 }
 
+class Session
+{
+    public function set($name, $value)
+    {
+        echo "Set session variable '$name' to '$value'.\n";
+    }
+}
+
 if ('production' === getenv('APP_ENV')) {
     Container::register('Auth', 'DbAuth', ['mysql://localhost', 'root', '123456']);
 } else {
     Container::register('Auth', 'HttpAuth');
 }
 
-$app = Container::inject('Auth', function ($auth) {
-    return new App($auth);
+$app = Container::inject('Auth', 'Session', function ($auth, $session) {
+    return new App($auth, $session);
 });
 
 $username = 'jaceju';
