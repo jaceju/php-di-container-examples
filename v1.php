@@ -5,10 +5,14 @@ class App
     protected $auth = null;
     protected $session = null;
 
+    public function __construct($dsn, $username, $password)
+    {
+        $this->auth = new Auth($dsn, $username, $password);
+        $this->session = new Session();
+    }
+
     public function login($username, $password)
     {
-        $this->auth = new Auth('mysql://localhost', 'root', '123456');
-        $this->session = new Session();
         if ($this->auth->check($username, $password)) {
             $this->session->set('username', $username);
             return true;
@@ -41,7 +45,7 @@ class Session
     }
 }
 
-$app = new App();
+$app = new App('mysql://localhost', 'root', '123456');
 $username = 'jaceju';
 if ($app->login($username, 'password')) {
     echo "$username just signed in.\n";
