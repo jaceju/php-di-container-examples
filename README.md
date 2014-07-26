@@ -119,13 +119,15 @@ $app = new App($auth, $session);
 
 這種「將依賴的類別改用方法參數來注入」的作法，就是我們說的「依賴注入 (Dependency Injection) 」。
 
-依賴注入常見的方式有兩種： Constructor Injection 及 Setter Injection 。它們的實作形式並沒有什麼不同，差別只在於是不是類別建構式而已。
+常見依賴注入的方式有兩種： Constructor Injection 及 Setter Injection 。它們的實作形式並沒有什麼不同，差別只在於是不是類別建構式而已。
 
 不過 Constructor Injection 必須在建立物件實體時就進行注入，而 Setter Injection 則是可以在物件實體建立後才透過 setter 函式來進行注入。而這裡為了方便解說，我採用的是 Constructor Injection 。
 
 ## 依賴抽象介面
 
-好了，現在的問題是 `Auth` 類別的實作還是依賴在資料庫上，所以我們也要讓 `Auth` 類別跟資料庫之間解除依賴關係，讓它成為一個抽象介面。這裡的抽象介面是指觀念上的意義，而非語言層級上的抽象類別 (Abstract Class) 或介面 (Interface) 。至於在實作上該用抽象類別還是介面，在這個範例裡並沒有差別，大家可以自行判斷；這裡我用介面 (Interface) ，因為我僅需要 `check` 這個介面方法的定義而已。
+好了，現在的問題是 `Auth` 類別的實作還是依賴在資料庫上，所以我們也要讓 `Auth` 類別跟資料庫之間解除依賴關係，讓它成為一個抽象介面。
+
+這裡的抽象介面是指觀念上的意義，而非語言層級上的抽象類別 (Abstract Class) 或介面 (Interface) 。至於在實作上該用抽象類別還是介面，在這個範例裡並沒有差別，大家可以自行判斷；這裡我用介面 (Interface) ，因為我僅需要 `Auth::check()` 這個介面方法的定義而已。
 
 這一步首先我把原來的 `Auth` 類別重新命名為 `DbAuth` 類別：
 
@@ -147,7 +149,7 @@ class DbAuth
 ?>
 ```
 
-接著建立一個 `Auth` 介面，它包含了 `check` 方法的定義：
+接著建立一個 `Auth` 介面，它包含了 `Auth::check()` 方法的定義：
 
 ```php
 <?php
@@ -158,10 +160,10 @@ interface Auth
 ?>
 ```
 
-然後讓 `DbAuth` 類別實作 `Auth` 介面。
+然後讓 `DbAuth` 類別實作 `Auth` 介面：
 
 ```php
-<?
+<?php
 class DbAuth implements Auth
 {
     // ...
@@ -216,6 +218,7 @@ $auth = Container::get('Auth');
 $session = new Session();
 $app = new App($auth, $session);
 ?>
+```
 
 首先我們在 DI 容器中先以 `Container::register()` 方法來註冊 `Auth` 這個別名實際上要對應哪個類別，以及建立物件實體時會用到的初始化參數。要注意，這裡的別名並不是指真正的類別或介面，但我們可以用相同的名稱以避免邏輯上的問題。
 
