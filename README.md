@@ -46,13 +46,11 @@ class Auth
     public function __construct($dsn, $user, $pass)
     {
         echo "Connecting to '$dsn' with '$user'/'$pass'...\n";
-        sleep(1);
     }
 
     public function check($username, $password)
     {
         echo "Checking username, password from database...\n";
-        sleep(1);
         return true;
     }
 }
