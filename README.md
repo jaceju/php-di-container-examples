@@ -334,9 +334,9 @@ class Container
 
 ## 自動解決所有依賴注入
 
-如果在我們的範例裡， `Container` 類別如果可以提供一個方法，自動為我們解決所有 `App` 類別依賴問題，那麼程式就可以更乾淨些。
+在我們的範例裡， `Container` 類別如果可以提供一個方法，自動為我們解決所有 `App` 類別依賴問題，那麼程式就可以更乾淨些。
 
-要做到這點，我們就必須知道要注入的方法所需要參數的類型；而在 PHP 中， [Type Hinting](http://php.net/manual/en/language.oop5.typehinting.php) 就可以告訴我們參數所對應的變數類型或類別。
+要做到這點，我們就必須知道要注入的方法所需要參數的類型；而在 PHP 中的 [Type Hinting](http://php.net/manual/en/language.oop5.typehinting.php) ，就可以告訴我們參數所對應的變數類型或類別。
 
 回到 `App::__construct()` 建構子上，我們看到 `$auth` 與 `$session` 兩個參數的 type hint 分別對應到 `Auth` 與 `Session` 這兩個類別，剛好就可以用來當做我們做自動依賴注入的條件。
 
@@ -393,9 +393,9 @@ class Container
 
 `Container::resolve()` 方法與 `Container::get()` 方法的原理類似，但較特別的是它使用了 `ReflectionClass::getConstructor()` 方法來取得類別建構子的 `ReflectionMethod` 實體；接著再用 `ReflectionMethod::getParameters()` 取出參數的 `ReflectionParameter` 物件集合 (陣列) 。
 
-而後我們就可以在迴圈中一一透過 `ReflectionParameter::getClass()` 方法與 `ReflectionClass::getName()` 方法來取得 type hint 所指向的類別名稱。當有了參數所對應的類別名稱後，就可以用 `Container::get()` 方法來取得參數的物件實體。
+而後我們就可以在迴圈中一一透過 `ReflectionParameter::getClass()` 方法與 `ReflectionClass::getName()` 方法來取得 type hint 所指向的類別或介面名稱。當有了參數所對應的類別或介面名稱後，就可以用 `Container::get()` 方法來取得參數的物件實體。
 
-最後把這些物件帶回建構子的參數裡並初始化我們所需要的物件實體，就完成了 `App` 類別的自動依賴注入。
+最後把這些物件帶回建構子的參數裡，並初始化我們所需要的物件實體，就完成了 `App` 類別的自動依賴注入。
 
 ## 深入思考
 
@@ -416,6 +416,6 @@ class Container
 
 在 PHP 上的 DI 容器的基本實作原理也不複雜，透過 Reflection 機制就可以看到類別內部的結構，讓我們對它的建構子注入我們想要的參數值。
 
-DI 容器要考量的部份也不少，但這些功能都已經有 Framework 實作，我們可以在專案中使用它們。
+DI 容器要考量的部份也不少，但這些功能都已經有 Framework 實作，我們應該在專案中使用它們而儘可能不要自行開發。
 
 希望透過以上的介紹，可以讓大家對 Framework 的依賴注入機制有基本的認知。
