@@ -1,4 +1,4 @@
-# 理解 Dependency Inject 實作原理
+# 理解 Dependency Injection 實作原理
 
 現代較新的 Web Framework 都強調自己有 Dependency Injection (以下簡稱 DI ) 的特色，只是很多人對它的運作原理還是一知半解。
 
