@@ -21,7 +21,12 @@ class App
     }
 }
 
-class Auth
+interface Auth
+{
+    public function check($username, $password);
+}
+
+class DbAuth implements Auth
 {
     public function __construct($dsn, $user, $pass)
     {
@@ -37,21 +42,6 @@ class Auth
     }
 }
 
-class HttpAuth extends Auth
-{
-    public function __construct()
-    {
-
-    }
-
-    public function check($username, $password)
-    {
-        echo "Checking username, password from HTTP Authentication...\n";
-        sleep(1);
-        return true;
-    }
-}
-
 class Session
 {
     public function set($name, $value)
@@ -60,7 +50,9 @@ class Session
     }
 }
 
-$app = new App(new HttpAuth(), new Session());
+$auth = new DbAuth('mysql://localhost', 'root', '123456');
+$session = new Session();
+$app = new App($auth, $session);
 $username = 'jaceju';
 if ($app->login($username, 'password')) {
     echo "$username just signed in.\n";

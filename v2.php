@@ -45,7 +45,9 @@ class Session
     }
 }
 
-$app = new App(new Auth('mysql://localhost', 'root', '123456'), new Session());
+$auth = new Auth('mysql://localhost', 'root', '123456');
+$session = new Session();
+$app = new App($auth, $session);
 $username = 'jaceju';
 if ($app->login($username, 'password')) {
     echo "$username just signed in.\n";
